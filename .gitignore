@@ -4,7 +4,6 @@ Thumbs.db
 .DS_Store
 *.o
 *.a
-kernel/**/*.s
 tools/system
 boot/setup
 boot/bootsect
