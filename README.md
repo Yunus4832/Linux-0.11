@@ -1,7 +1,12 @@
 # linux-0.11 development environment(linux-based)
 
 > Code from [Linux-0.11](https://github.com/yuan-xy/Linux-0.11), with some
-> changes to README.md and .gitignore
+> changes to README.md and .gitignore.
+>
+> Use `git update-index --skip-worktree hdc-0.11.img` to avoid tracking the
+> hdc-0.11.img file, which will be modified after the VM is booted, and these
+> changes should not be synchronized to the code repository, the instance
+> image file is just there to provide a root filesystem for the kernel.
 
 1. preparation
 
