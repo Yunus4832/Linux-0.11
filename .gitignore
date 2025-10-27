@@ -1,0 +1,13 @@
+Thumbs.db
+*.log
+*.bak
+.DS_Store
+*.o
+*.a
+kernel/**/*.s
+tools/system
+boot/setup
+boot/bootsect
+Image
+System.map
+.gdb_history
