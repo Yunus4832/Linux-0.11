@@ -40,37 +40,37 @@
 
    * compile
 
-   ```bash
-   cd tools/calltree-2.3
-   ```
+     ```bash
+     cd tools/calltree-2.3
+     ```
 
    * install
 
-   ```bash
-   sudo cp ./calltree/OBJ/i686-linux-cc/calltree /usr/bin
-   ```
+     ```bash
+     sudo cp ./calltree/OBJ/i686-linux-cc/calltree /usr/bin
+     ```
 
    * use
 
-   ```bash
-   calltree    # just type calltree and get the help
-   ```
+     ```bash
+     calltree    # just type calltree and get the help
+     ```
 
 3. debug
 
    * start the kernel with qemu, which will listening on port 1234
 
-   ```bash
-   cd linux-0.11
-   make debug
-   ```
+     ```bash
+     cd linux-0.11
+     make debug
+     ```
 
    * open a new terminal, start gdb and connect the gdbstub in qemu
 
-   ```bash
-   gdb linux-0.11/tools/system
-   (gdb) break main
-   (gdb) target remote localhost:1234
-   (gdb) s     // si:assembly instruction, s|n: c statement(s will enter into subfunc)
-   (gdb) ...
-   ```
+     ```bash
+     gdb linux-0.11/tools/system
+     (gdb) break main
+     (gdb) target remote localhost:1234
+     (gdb) s     // si:assembly instruction, s|n: c statement(s will enter into subfunc)
+     (gdb) ...
+     ```
