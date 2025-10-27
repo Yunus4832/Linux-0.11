@@ -4,6 +4,7 @@ Thumbs.db
 .DS_Store
 *.o
 *.a
+kernel/chr_drv/keyboard.s
 tools/system
 boot/setup
 boot/bootsect
