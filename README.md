@@ -1,7 +1,8 @@
 # linux-0.11 development environment(linux-based)
 
 > Code from [Linux-0.11](https://github.com/yuan-xy/Linux-0.11), with some
-> changes to README.md and .gitignore.
+> changes to README.md, .gitignore and Makefiles, delete some file that i
+> think are useless.
 >
 > Use `git update-index --skip-worktree hdc-0.11.img` to avoid tracking the
 > hdc-0.11.img file, which will be modified after the VM is booted, and these
@@ -39,27 +40,6 @@
    make tags    # create the tag file from the source code
    make cscope  # create the cscope index database from the source code
    ```
-
-   > NOTE! there is a calltree in tools/, which can help you to analyze the
-   > source code via printing the calling tree of some indicated functions.
-
-   * compile
-
-     ```bash
-     cd tools/calltree-2.3
-     ```
-
-   * install
-
-     ```bash
-     sudo cp ./calltree/OBJ/i686-linux-cc/calltree /usr/bin
-     ```
-
-   * use
-
-     ```bash
-     calltree    # just type calltree and get the help
-     ```
 
 3. debug
 

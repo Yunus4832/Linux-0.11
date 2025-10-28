@@ -8,8 +8,8 @@
 
 include ../../Makefile.header
 
-CFLAGS	+= -I../../include
-CPP	+= -I../../include
+CFLAGS += -I../../include
+CPP += -I../../include
 
 .c.s:
 	@$(CC) $(CFLAGS) \
@@ -20,7 +20,7 @@ CPP	+= -I../../include
 	@$(CC) $(CFLAGS) \
 	-c -o $*.o $<
 
-OBJS  = ll_rw_blk.o floppy.o hd.o ramdisk.o
+OBJS = ll_rw_blk.o floppy.o hd.o ramdisk.o
 
 blk_drv.a: $(OBJS)
 	@$(AR) rcs blk_drv.a $(OBJS)

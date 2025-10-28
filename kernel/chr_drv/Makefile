@@ -8,8 +8,8 @@
 
 include ../../Makefile.header
 
-CFLAGS	+= -I../../include
-CPP	+= -I../../include
+CFLAGS += -I../../include
+CPP += -I../../include
 
 .c.s:
 	@$(CC) $(CFLAGS) \
@@ -20,7 +20,7 @@ CPP	+= -I../../include
 	@$(CC) $(CFLAGS) \
 	-c -o $*.o $<
 
-OBJS  = tty_io.o console.o keyboard.o serial.o rs_io.o \
+OBJS = tty_io.o console.o keyboard.o serial.o rs_io.o \
 	tty_ioctl.o
 
 chr_drv.a: $(OBJS)

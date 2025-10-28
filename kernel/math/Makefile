@@ -8,8 +8,8 @@
 
 include ../../Makefile.header
 
-CFLAGS	+= -I../../include
-CPP	+= -I../../include
+CFLAGS += -I../../include
+CPP += -I../../include
 
 .c.s:
 	@$(CC) $(CFLAGS) \
@@ -20,7 +20,7 @@ CPP	+= -I../../include
 	@$(CC) $(CFLAGS) \
 	-c -o $*.o $<
 
-OBJS  = math_emulate.o
+OBJS = math_emulate.o
 
 math.a: $(OBJS)
 	@$(AR) rcs math.a $(OBJS)

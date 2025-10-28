@@ -8,7 +8,7 @@
 
 include ../Makefile.header
 
-LDFLAGS	+= -r
+LDFLAGS += -r
 
 # NOTE!: do not try to add -On to CFLAGS with gcc4.x, which will optimize the
 # memcpy function a lot to let the kernel not work, for fixing this problem,
@@ -18,9 +18,9 @@ LDFLAGS	+= -r
 # compling procedure of it, it's not good too. for playing with linux-0.11, we
 # just have fun, have no much concerning about the performance.
 
-CFLAGS	+= -I../include
+CFLAGS += -I../include
 
-CPP	+= -I../include
+CPP += -I../include
 
 .c.s:
 	@$(CC) $(CFLAGS) \
@@ -31,7 +31,7 @@ CPP	+= -I../include
 	@$(CC) $(CFLAGS) \
 	-c -o $*.o $<
 
-OBJS  = sched.o system_call.o traps.o asm.o fork.o \
+OBJS = sched.o system_call.o traps.o asm.o fork.o \
 	panic.o printk.o vsprintf.o sys.o exit.o \
 	signal.o mktime.o who.o
 

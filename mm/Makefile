@@ -1,9 +1,8 @@
-
 include ../Makefile.header
 
 LDFLAGS += -r
-CFLAGS	+= -I../include
-CPP	+= -I../include
+CFLAGS += -I../include
+CPP += -I../include
 
 .c.o:
 	@$(CC) $(CFLAGS) \
@@ -14,7 +13,7 @@ CPP	+= -I../include
 	@$(CC) $(CFLAGS) \
 	-S -o $*.s $<
 
-OBJS	= memory.o page.o
+OBJS = memory.o page.o
 
 all: mm.o
 
