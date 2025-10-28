@@ -30,6 +30,8 @@ DRIVERS = kernel/blk_drv/blk_drv.a kernel/chr_drv/chr_drv.a
 MATH = kernel/math/math.a
 LIBS = lib/lib.a
 
+all: Image
+
 help:
 	@echo "<<<<This is the basic help info of linux-0.11>>>"
 	@echo ""
@@ -38,8 +40,6 @@ help:
 	@echo "     make start -- start the kernel in qemu"
 	@echo "     make disk  -- generate a kernel Image & copy it to floppy"
 	@echo "     make clean -- clean the object files"
-
-all: Image
 
 start:
 	@qemu-system-x86_64 -m 16M -boot a -fda Image -hda $(HDA_IMG)
