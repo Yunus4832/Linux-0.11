@@ -37,11 +37,17 @@ help:
 	@echo "<<<<This is the basic help info of linux-0.11>>>"
 	@echo ""
 	@echo "Usage:"
-	@echo "     make --generate a kernel floppy Image with a fs on hda1"
-	@echo "     make start -- start the kernel in qemu in gui environment"
-	@echo "     make start-no-gui -- start the kernel in qemu without gui"
-	@echo "     make disk  -- generate a kernel Image & copy it to floppy"
-	@echo "     make clean -- clean the object files"
+	@echo "    make help -- get help"
+	@echo "    make -- compile"
+	@echo "    make start -- start the kernel in qemu without gui"
+	@echo "    make start-with-window -- start the kernel in qemu in gui environment"
+	@echo "    make clean -- clean"
+
+#
+# use `alt+2 quit` to quit qemu
+#
+start:
+	@qemu-system-x86_64 -display curses -m 16M -boot a -fda Image -hda $(HDA_IMG)
 
 #
 # If using the SDL frontend of QEMU:
@@ -49,20 +55,12 @@ help:
 # If using the GTK frontend of QEMU (default since QEMU 1.5):
 #   Press Ctrl+ Alt+ G
 #
-start:
+start-with-window:
 	@qemu-system-x86_64 -m 16M -boot a -fda Image -hda $(HDA_IMG)
-
-#
-# use `alt+2 quit` to quit qemu
-#
-start-no-gui:
-	@qemu-system-x86_64 -display curses -m 16M -boot a -fda Image -hda $(HDA_IMG)
-
-disk: Image
-	@dd bs=8192 if=Image of=/dev/fd0
 
 clean:
 	@rm -f Image
+	@rm -f $(HDA_IMG)
 
 dep:
 	@sed '/\#\#\# Dependencies/q' < Makefile > tmp_make
