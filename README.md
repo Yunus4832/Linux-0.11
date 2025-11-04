@@ -28,29 +28,10 @@
 
    ```bash
    cd linux-0.11
-   make help    # get help
-   make         # compile
-   make start   # boot it on qemu
-   make debug   # debug it via qemu & gdb, you'd start gdb to connect it.
-   make tags    # create the tag file from the source code
-   make cscope  # create the cscope index database from the source code
+   make help               # get help
+   make                    # compile
+   make start              # start the kernel in qemu in gui environment
+   make start-with-window  # start the kernel in qemu without gui
+   make clean              # clean
    ```
 
-3. debug
-
-   * start the kernel with qemu, which will listening on port 1234
-
-     ```bash
-     cd linux-0.11
-     make debug
-     ```
-
-   * open a new terminal, start gdb and connect the gdbstub in qemu
-
-     ```bash
-     gdb linux-0.11/tools/system
-     (gdb) break main
-     (gdb) target remote localhost:1234
-     (gdb) s     // si:assembly instruction, s|n: c statement(s will enter into subfunc)
-     (gdb) ...
-     ```
