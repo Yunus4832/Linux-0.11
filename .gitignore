@@ -1,0 +1,14 @@
+Thumbs.db
+*.log
+*.bak
+.DS_Store
+*.o
+*.a
+kernel/chr_drv/keyboard.s
+tools/system
+boot/setup
+boot/bootsect
+Image
+System.map
+hdc-0.11.img
+.gdb_history
