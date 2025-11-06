@@ -6,6 +6,7 @@ Thumbs.db
 *.a
 kernel/chr_drv/keyboard.s
 tools/system
+tools/kernel
 boot/setup
 boot/bootsect
 Image
