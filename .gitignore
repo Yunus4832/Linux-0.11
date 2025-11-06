@@ -10,5 +10,6 @@ boot/setup
 boot/bootsect
 Image
 System.map
+system.tmp
 hdc-0.11.img
 .gdb_history
