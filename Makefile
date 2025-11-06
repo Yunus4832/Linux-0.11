@@ -61,6 +61,9 @@ start-with-window:
 clean:
 	@rm -f Image
 	@rm -f $(HDA_IMG)
+	@rm -f System.map system.tmp tmp_make core boot/bootsect boot/setup
+	@rm -f tools/kernel
+	@rm -f init/*.o tools/system boot/*.o
 	@for i in mm fs kernel lib boot; do make clean -C $$i; done
 
 dep:
@@ -122,6 +125,13 @@ tools/system: boot/head.o init/main.o \
 	@nm tools/system | grep -v '\(compiled\)\|\(\.o$$\)\|\( [aU] \)\|\(\.\.ng$$\)\|\(LASH[RL]DI\)'| sort > System.map 
 
 Image: boot/bootsect boot/setup tools/system
+	@cp -f tools/system system.tmp
+	@$(STRIP) system.tmp
+	@$(OBJCOPY) -O binary -R .note -R .comment system.tmp tools/kernel
+	@tools/build.sh boot/bootsect boot/setup tools/kernel Image $(ROOT_DEV)
+	@sync
+
+ImageOnly: boot/bootsect boot/setup tools/system
 	@cp -f tools/system system.tmp
 	@$(STRIP) system.tmp
 	@$(OBJCOPY) -O binary -R .note -R .comment system.tmp tools/kernel
