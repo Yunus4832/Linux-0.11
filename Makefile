@@ -61,6 +61,7 @@ start-with-window:
 clean:
 	@rm -f Image
 	@rm -f $(HDA_IMG)
+	@for i in mm fs kernel lib boot; do make clean -C $$i; done
 
 dep:
 	@sed '/\#\#\# Dependencies/q' < Makefile > tmp_make
