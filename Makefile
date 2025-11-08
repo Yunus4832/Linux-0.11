@@ -3,6 +3,8 @@
 #
 HDA_IMG = hdc-0.11.img
 HDA_TEMPLATE = hdc-0.11-example.img
+GCC_IMAGE=docker.io/gcc:4.6
+CONTRAINER_ENGINE=podman
 
 #
 # if you want the ram-disk device, define this to be the
@@ -31,7 +33,13 @@ DRIVERS = kernel/blk_drv/blk_drv.a kernel/chr_drv/chr_drv.a
 MATH = kernel/math/math.a
 LIBS = lib/lib.a
 
-all: $(HDA_IMG) Image
+all: $(HDA_IMG) image
+
+#
+# use docker to compile kernel
+#
+use-contrainer:
+	@$(CONTRAINER_ENGINE) run --rm -v ".:/Linux-0.11" -w "/Linux-0.11" $(GCC_IMAGE) make
 
 help:
 	@echo "<<<<This is the basic help info of linux-0.11>>>"
@@ -39,9 +47,11 @@ help:
 	@echo "Usage:"
 	@echo "    make help -- get help"
 	@echo "    make -- compile"
+	@echo "    make use-contrainer -- compile use contrainer docker or podman"
 	@echo "    make start -- start the kernel in qemu without gui"
 	@echo "    make start-with-window -- start the kernel in qemu in gui environment"
 	@echo "    make clean -- clean"
+
 
 #
 # use `alt+2 quit` to quit qemu
@@ -124,14 +134,19 @@ tools/system: boot/head.o init/main.o \
 	-o tools/system
 	@nm tools/system | grep -v '\(compiled\)\|\(\.o$$\)\|\( [aU] \)\|\(\.\.ng$$\)\|\(LASH[RL]DI\)'| sort > System.map 
 
-Image: boot/bootsect boot/setup tools/system
+
+
+image: boot/bootsect boot/setup tools/system
 	@cp -f tools/system system.tmp
 	@$(STRIP) system.tmp
 	@$(OBJCOPY) -O binary -R .note -R .comment system.tmp tools/kernel
 	@tools/build.sh boot/bootsect boot/setup tools/kernel Image $(ROOT_DEV)
 	@sync
 
-ImageOnly: boot/bootsect boot/setup tools/system
+image-use-contrainer:
+	@$(CONTRAINER_ENGINE) run --rm -v ".:/Linux-0.11" -w "/Linux-0.11" $(GCC_IMAGE) make image
+
+image-only: boot/bootsect boot/setup tools/system
 	@cp -f tools/system system.tmp
 	@$(STRIP) system.tmp
 	@$(OBJCOPY) -O binary -R .note -R .comment system.tmp tools/kernel
@@ -141,6 +156,9 @@ ImageOnly: boot/bootsect boot/setup tools/system
 	@rm -f init/*.o tools/system boot/*.o
 	@for i in mm fs kernel lib boot; do make clean -C $$i; done
 	@sync
+
+image-use-contrainer:
+	@$(CONTRAINER_ENGINE) run --rm -v ".:/Linux-0.11" -w "/Linux-0.11" $(GCC_IMAGE) make image-only
 
 $(HDA_IMG): $(HDA_TEMPLATE)
 	@echo "Restoring $(HDA_IMG) from $(HDA_TEMPLATE)..."
