@@ -39,6 +39,12 @@ all: $(HDA_IMG) image
 # use docker to compile kernel
 #
 use-contrainer:
+	@command -v $(CONTRAINER_ENGINE) >/dev/null 2>&1 || { \
+		echo "Error '$(CONTRAINER_ENGINE)' is not installed or not in PATH." >&2; \
+		echo "Please install either 'podman' or 'docker'." >&2; \
+		echo "To specify explicitly, run: make CONTRAINER_ENGINE=docker" >&2 \
+		exit 1;\
+	}
 	@$(CONTRAINER_ENGINE) run --rm -v ".:/Linux-0.11" -w "/Linux-0.11" $(GCC_IMAGE) make
 
 help:
@@ -144,6 +150,12 @@ image: boot/bootsect boot/setup tools/system
 	@sync
 
 image-use-contrainer:
+	@command -v $(CONTRAINER_ENGINE) >/dev/null 2>&1 || { \
+		echo "Error '$(CONTRAINER_ENGINE)' is not installed or not in PATH." >&2; \
+		echo "Please install either 'podman' or 'docker'." >&2; \
+		echo "To specify explicitly, run: make CONTRAINER_ENGINE=docker" >&2 \
+		exit 1;\
+	}
 	@$(CONTRAINER_ENGINE) run --rm -v ".:/Linux-0.11" -w "/Linux-0.11" $(GCC_IMAGE) make image
 
 image-only: boot/bootsect boot/setup tools/system
@@ -158,6 +170,12 @@ image-only: boot/bootsect boot/setup tools/system
 	@sync
 
 image-only-use-contrainer:
+	@command -v $(CONTRAINER_ENGINE) >/dev/null 2>&1 || { \
+		echo "Error '$(CONTRAINER_ENGINE)' is not installed or not in PATH." >&2; \
+		echo "Please install either 'podman' or 'docker'." >&2; \
+		echo "To specify explicitly, run: make CONTRAINER_ENGINE=docker" >&2 \
+		exit 1;\
+	}
 	@$(CONTRAINER_ENGINE) run --rm -v ".:/Linux-0.11" -w "/Linux-0.11" $(GCC_IMAGE) make image-only
 
 $(HDA_IMG): $(HDA_TEMPLATE)
