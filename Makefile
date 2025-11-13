@@ -63,7 +63,7 @@ help:
 #
 # use `alt+2 quit` to quit qemu
 #
-start: clean use-contrainer
+start:
 	@qemu-system-x86_64 -display curses -m 16M -boot a -fda Image -hda $(HDA_IMG)
 
 #
