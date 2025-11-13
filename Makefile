@@ -55,6 +55,7 @@ help:
 	@echo "    make -- compile"
 	@echo "    make use-contrainer -- compile use contrainer docker or podman"
 	@echo "    make start -- start the kernel in qemu without gui"
+	@echo "    make rebuild-and-start -- rebuild kernel and start the kernel in qemu without gui"
 	@echo "    make start-with-window -- start the kernel in qemu in gui environment"
 	@echo "    make clean -- clean"
 
@@ -62,7 +63,13 @@ help:
 #
 # use `alt+2 quit` to quit qemu
 #
-start:
+start: clean use-contrainer
+	@qemu-system-x86_64 -display curses -m 16M -boot a -fda Image -hda $(HDA_IMG)
+
+#
+# rebuild and start kernel
+#
+rebuild-and-start: clean use-contrainer
 	@qemu-system-x86_64 -display curses -m 16M -boot a -fda Image -hda $(HDA_IMG)
 
 #
