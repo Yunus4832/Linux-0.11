@@ -92,6 +92,21 @@ void math_state_restore()
 }
 
 /*
+ * switch_to_new
+ */
+void __attribute__((regparm(1))) __switch_to_new(long next_index)
+{
+    printk("next_index: %d          \n", next_index);
+    current = task[next_index];
+    ltr(next_index);
+    lldt(next_index);
+    {
+        unsigned long new_cr3 = current->tss.cr3;
+        asm volatile("movl %0,%%cr3": :"r" (new_cr3));
+    }
+}
+
+/*
  *  'schedule()' is the scheduler function. This is GOOD CODE! There
  * probably won't be any reason to change this, as it should work well
  * in all circumstances (ie gives IO-bound processes good response etc).
@@ -138,7 +153,8 @@ void schedule(void)
 				(*p)->counter = ((*p)->counter >> 1) +
 						(*p)->priority;
 	}
-	switch_to(next);
+    printk("start switch, next_index: %d \n", next);
+    switch_to_new(current, task[next], next);
 }
 
 int sys_pause(void)

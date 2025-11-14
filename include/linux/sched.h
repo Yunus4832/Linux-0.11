@@ -174,8 +174,10 @@ __asm__("str %%ax\n\t" \
 struct {long a,b;} __tmp; \
 __asm__("cmpl %%ecx,current\n\t" \
 	"je 1f\n\t" \
-	"movw %%dx,%1\n\t" \
+    "cli\n\t" \
 	"xchgl %%ecx,current\n\t" \
+	"movw %%dx,%1\n\t" \
+    "sti\n\t"\
 	"ljmp *%0\n\t" \
 	"cmpl %%ecx,last_task_used_math\n\t" \
 	"jne 1f\n\t" \
@@ -184,6 +186,35 @@ __asm__("cmpl %%ecx,current\n\t" \
 	::"m" (*&__tmp.a),"m" (*&__tmp.b), \
 	"d" (_TSS(n)),"c" ((long) task[n])); \
 }
+
+/*
+ * new switch_to
+ */
+#define switch_to_new(prev, next, next_index) do {\
+unsigned long eax, edx, ecx; \
+__asm__("pushl %%ebx\n\t" \
+        "pushl %%esi\n\t" \
+        "pushl %%edi\n\t" \
+        "pushl %%ebp\n\t" \
+        "movl %%esp,%0\n\t" \
+        "movl %5,%%esp\n\t" \
+        "movl $1f,%1\n\t" \
+        "pushl %6\n\t" \
+        "jmp __switch_to_new\n" \
+        "1:\t" \
+        "popl %%ebp\n\t" \
+        "popl %%edi\n\t" \
+        "popl %%esi\n\t" \
+        "popl %%ebx" \
+        :"=m" (prev->tss.esp), \
+        "=m" (prev->tss.eip), \
+        "=a" (eax), \
+        "=d" (edx), \
+        "=c" (ecx) \
+        :"m" (next->tss.esp), \
+        "m" (next->tss.eip), \
+        "a" (next_index)); \
+} while (0)
 
 #define PAGE_ALIGN(n) (((n)+0xfff)&0xfffff000)
 
