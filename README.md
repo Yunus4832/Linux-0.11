@@ -16,12 +16,13 @@
 
    ```bash
    cd linux-0.11
-   make help               # get help
-   make                    # compile
-   make use-contrainer     # compile use contrainer docker or podman (recommend)
-   make start              # start the kernel in qemu without gui
-   make rebuild-and-start  # rebuild kernel and start the kernel in qemu without gui
-   make start-with-window  # start the kernel in qemu in gui environment
-   make clean              # clean
+   make help                                # get help
+   make                                     # compile
+   make use-contrainer                      # compile use contrainer docker or podman (recommend)
+   make start                               # start the kernel in qemu without gui
+   make start-with-window                   # start the kernel in qemu in gui environment
+   make rebuild-and-start                   # rebuild kernel and start the kernel in qemu without gui
+   make rebuild-and-start-use-contrainer    # rebuild kernel and start the kernel in qemu without gui use contrainer
+   make clean                               # clean
    ```
 

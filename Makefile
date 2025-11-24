@@ -35,6 +35,19 @@ LIBS = lib/lib.a
 
 all: $(HDA_IMG) image
 
+help:
+	@echo "<<<<This is the basic help info of linux-0.11>>>"
+	@echo ""
+	@echo "Usage:"
+	@echo "    make help -- get help"
+	@echo "    make -- compile"
+	@echo "    make use-contrainer -- compile use contrainer docker or podman"
+	@echo "    make start -- start the kernel in qemu without gui"
+	@echo "    make start-with-window -- start the kernel in qemu in gui environment"
+	@echo "    make rebuild-and-start -- rebuild kernel and start the kernel in qemu without gui"
+	@echo "    make rebuild-and-start-use-contrainer -- rebuild kernel and start the kernel in qemu without gui use contrainer"
+	@echo "    make clean -- clean"
+
 #
 # use docker to compile kernel
 #
@@ -45,32 +58,18 @@ use-contrainer:
 		echo "To specify explicitly, run: make CONTRAINER_ENGINE=docker" >&2 \
 		exit 1;\
 	}
-	@$(CONTRAINER_ENGINE) run --rm -v ".:/Linux-0.11" -w "/Linux-0.11" $(GCC_IMAGE) make
-
-help:
-	@echo "<<<<This is the basic help info of linux-0.11>>>"
-	@echo ""
-	@echo "Usage:"
-	@echo "    make help -- get help"
-	@echo "    make -- compile"
-	@echo "    make use-contrainer -- compile use contrainer docker or podman"
-	@echo "    make start -- start the kernel in qemu without gui"
-	@echo "    make rebuild-and-start -- rebuild kernel and start the kernel in qemu without gui"
-	@echo "    make start-with-window -- start the kernel in qemu in gui environment"
-	@echo "    make clean -- clean"
-
+	@$(CONTRAINER_ENGINE) run --rm -v ".:/Linux-0.11" -w "/Linux-0.11" $(GCC_IMAGE) make all
 
 #
 # use `alt+2 quit` to quit qemu
 #
 start:
-	@qemu-system-x86_64 -display curses -m 16M -boot a -fda Image -hda $(HDA_IMG)
-
-#
-# rebuild and start kernel
-#
-rebuild-and-start: clean use-contrainer
-	@qemu-system-x86_64 -display curses -m 16M -boot a -fda Image -hda $(HDA_IMG)
+	@qemu-system-x86_64 \
+		-display curses \
+		-m 16M \
+		-boot order=a \
+		-drive file=Image,format=raw,if=floppy,index=0\
+		-drive file=$(HDA_IMG),format=raw,if=ide,index=0
 
 #
 # If using the SDL frontend of QEMU:
@@ -79,7 +78,21 @@ rebuild-and-start: clean use-contrainer
 #   Press Ctrl+ Alt+ G
 #
 start-with-window:
-	@qemu-system-x86_64 -m 16M -boot a -fda Image -hda $(HDA_IMG)
+	@qemu-system-x86_64 \
+		-m 16M \
+		-boot order=a \
+		-drive file=Image,format=raw,if=floppy,index=0\
+		-drive file=$(HDA_IMG),format=raw,if=ide,index=0
+
+#
+# rebuild and start kernel
+#
+rebuild-and-start: clean all start
+
+#
+# rebuild and start kernel use-contrainer
+#
+rebuild-and-start-use-contrainer: clean use-contrainer start
 
 clean:
 	@rm -f Image
@@ -155,35 +168,6 @@ image: boot/bootsect boot/setup tools/system
 	@$(OBJCOPY) -O binary -R .note -R .comment system.tmp tools/kernel
 	@tools/build.sh boot/bootsect boot/setup tools/kernel Image $(ROOT_DEV)
 	@sync
-
-image-use-contrainer:
-	@command -v $(CONTRAINER_ENGINE) >/dev/null 2>&1 || { \
-		echo "Error '$(CONTRAINER_ENGINE)' is not installed or not in PATH." >&2; \
-		echo "Please install either 'podman' or 'docker'." >&2; \
-		echo "To specify explicitly, run: make CONTRAINER_ENGINE=docker" >&2 \
-		exit 1;\
-	}
-	@$(CONTRAINER_ENGINE) run --rm -v ".:/Linux-0.11" -w "/Linux-0.11" $(GCC_IMAGE) make image
-
-image-only: boot/bootsect boot/setup tools/system
-	@cp -f tools/system system.tmp
-	@$(STRIP) system.tmp
-	@$(OBJCOPY) -O binary -R .note -R .comment system.tmp tools/kernel
-	@tools/build.sh boot/bootsect boot/setup tools/kernel Image $(ROOT_DEV)
-	@rm -f System.map system.tmp tmp_make core boot/bootsect boot/setup
-	@rm -f tools/kernel
-	@rm -f init/*.o tools/system boot/*.o
-	@for i in mm fs kernel lib boot; do make clean -C $$i; done
-	@sync
-
-image-only-use-contrainer:
-	@command -v $(CONTRAINER_ENGINE) >/dev/null 2>&1 || { \
-		echo "Error '$(CONTRAINER_ENGINE)' is not installed or not in PATH." >&2; \
-		echo "Please install either 'podman' or 'docker'." >&2; \
-		echo "To specify explicitly, run: make CONTRAINER_ENGINE=docker" >&2 \
-		exit 1;\
-	}
-	@$(CONTRAINER_ENGINE) run --rm -v ".:/Linux-0.11" -w "/Linux-0.11" $(GCC_IMAGE) make image-only
 
 $(HDA_IMG): $(HDA_TEMPLATE)
 	@echo "Restoring $(HDA_IMG) from $(HDA_TEMPLATE)..."
